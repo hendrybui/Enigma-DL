@@ -77,6 +77,12 @@ input[type="checkbox"] {
   height: 16px;
 }
 
+.open-panel-btn {
+  width: 100%;
+  padding: 12px 20px;
+  font-size: 15px;
+}
+
 .primary-btn {
   background: #0a84ff;
   color: white;

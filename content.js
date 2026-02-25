@@ -92,6 +92,7 @@ function createUI() {
 
   const root = document.createElement('div');
   root.id = 'media-downloader-root';
+  root.style.display = 'none';
   
   // Create header
   const header = document.createElement('div');
@@ -351,8 +352,20 @@ function initiateDownload() {
 browser.runtime.onMessage.addListener(msg => {
   if (msg.cmd === 'progress') {
     updateProgressBar(msg);
+  } else if (msg.cmd === 'toggle') {
+    togglePanel();
   }
 });
+
+/**
+ * Show or hide the media panel
+ */
+function togglePanel() {
+  const root = document.getElementById('media-downloader-root');
+  if (root) {
+    root.style.display = root.style.display === 'none' ? 'flex' : 'none';
+  }
+}
 
 function updateProgressBar(msg) {
   if (!msg.url) return;
@@ -400,9 +413,6 @@ if (document.readyState === 'loading') {
 // Add keyboard shortcut to toggle UI (Ctrl+Shift+M)
 document.addEventListener('keydown', (e) => {
   if (e.ctrlKey && e.shiftKey && e.key === 'M') {
-    const root = document.getElementById('media-downloader-root');
-    if (root) {
-      root.style.display = root.style.display === 'none' ? 'block' : 'none';
-    }
+    togglePanel();
   }
 });
