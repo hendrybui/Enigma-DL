@@ -48,6 +48,19 @@ async function resetSettings() {
   }
 }
 
+// Open media panel on the active tab
+async function openMediaPanel() {
+  try {
+    const tabs = await browser.tabs.query({ active: true, currentWindow: true });
+    if (tabs.length > 0) {
+      await browser.tabs.sendMessage(tabs[0].id, { cmd: 'toggle' });
+      window.close();
+    }
+  } catch (error) {
+    showStatus('Could not open panel on this page', 'error');
+  }
+}
+
 // Show status message
 function showStatus(message, type) {
   const statusDiv = document.getElementById('status');
@@ -61,6 +74,7 @@ function showStatus(message, type) {
 }
 
 // Event listeners
+document.getElementById('openPanelBtn').addEventListener('click', openMediaPanel);
 document.getElementById('saveBtn').addEventListener('click', saveSettings);
 document.getElementById('resetBtn').addEventListener('click', resetSettings);
 
