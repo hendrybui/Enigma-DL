@@ -2,51 +2,62 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Media Downloader Settings</title>
+  <title>Ultimate Downloader</title>
   <link rel="stylesheet" href="popup.css">
 </head>
 <body>
   <div class="popup-container">
-    <h2>Media Downloader Settings</h2>
-    
-    <div class="settings-section">
-      <label for="downloadFolder">
-        Download Folder:
-        <span class="help-text">Relative to default downloads folder</span>
+    <div class="header">
+      <div class="header-icon">📥</div>
+      <div class="header-text">
+        <h1>Ultimate Downloader</h1>
+        <p>Download images &amp; videos from any site</p>
+      </div>
+    </div>
+
+    <div class="actions-row">
+      <button id="scanBtn" class="btn btn-primary">🔍 Scan Page</button>
+      <button id="downloadAllBtn" class="btn btn-success" disabled>⬇️ Download All</button>
+    </div>
+
+    <div class="filters-row">
+      <label class="filter-label">
+        <input type="checkbox" id="filterImages" checked>
+        <span>Images</span>
       </label>
-      <input type="text" id="downloadFolder" placeholder="media-downloads">
-    </div>
-
-    <div class="settings-section">
-      <label for="namingPattern">
-        Naming Pattern:
-        <span class="help-text">Use {timestamp}, {title}, {random}</span>
+      <label class="filter-label">
+        <input type="checkbox" id="filterVideos" checked>
+        <span>Videos</span>
       </label>
-      <input type="text" id="namingPattern" placeholder="{timestamp}_{title}_{random}">
-    </div>
-
-    <div class="settings-section">
-      <label class="checkbox-label">
-        <input type="checkbox" id="showNotifications">
-        Show download notifications
+      <label class="filter-label">
+        <input type="checkbox" id="filterAudio" checked>
+        <span>Audio</span>
       </label>
+      <label class="filter-label">
+        <input type="checkbox" id="filterDocuments" checked>
+        <span>Docs</span>
+      </label>
+      <div class="min-size">
+        <span>Min Size:</span>
+        <input type="number" id="minSize" placeholder="0" min="0" value="0">
+        <span>KB</span>
+      </div>
     </div>
 
-    <div class="settings-section">
-      <button id="saveBtn" class="primary-btn">Save Settings</button>
-      <button id="resetBtn" class="secondary-btn">Reset to Defaults</button>
+    <div class="stats-row">
+      <span id="statsImages" class="stat stat-image">0 images</span>
+      <span id="statsVideos" class="stat stat-video">0 videos</span>
+      <span id="statsAudio" class="stat stat-audio">0 audio</span>
+      <span id="statsDocs" class="stat stat-doc">0 docs</span>
     </div>
 
-    <div id="status" class="status-message"></div>
+    <div id="mediaList" class="media-list">
+      <div class="empty-state">No media found. Click "Scan Page" to discover media.</div>
+    </div>
 
-    <div class="info-section">
-      <h3>Usage Instructions</h3>
-      <ul>
-        <li>Press <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>M</kbd> to toggle the media downloader panel</li>
-        <li>The panel will automatically discover images and videos on the page</li>
-        <li>Select media items and click "Download Selected" to download them</li>
-        <li>Download progress will be shown in real-time</li>
-      </ul>
+    <div class="footer-row">
+      <button id="clearBtn" class="btn btn-secondary">Clear List</button>
+      <span id="statusMsg" class="status-msg"></span>
     </div>
   </div>
   <script src="popup.js"></script>
