@@ -1,0 +1,162 @@
+/**
+ * Styles for Media Downloader Popup
+ */
+
+body {
+  width: 400px;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-size: 14px;
+  color: #333;
+}
+
+.popup-container {
+  padding: 20px;
+}
+
+h2 {
+  margin: 0 0 20px 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #0a84ff;
+}
+
+h3 {
+  margin: 15px 0 10px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.settings-section {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: #333;
+}
+
+.help-text {
+  display: block;
+  font-size: 12px;
+  color: #666;
+  font-weight: normal;
+  margin-top: 2px;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+input[type="text"]:focus {
+  outline: none;
+  border-color: #0a84ff;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-weight: normal;
+}
+
+input[type="checkbox"] {
+  margin-right: 8px;
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+}
+
+.primary-btn {
+  background: #0a84ff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.primary-btn:hover {
+  background: #0060df;
+}
+
+.secondary-btn {
+  background: white;
+  color: #0a84ff;
+  border: 1px solid #0a84ff;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-left: 10px;
+  transition: all 0.2s;
+}
+
+.secondary-btn:hover {
+  background: #0a84ff;
+  color: white;
+}
+
+.status-message {
+  display: none;
+  padding: 10px;
+  border-radius: 4px;
+  margin-top: 15px;
+  font-size: 13px;
+}
+
+.status-message.success {
+  background: #e6f7e6;
+  color: #30c230;
+  border: 1px solid #30c230;
+}
+
+.status-message.error {
+  background: #ffe6e6;
+  color: #d70022;
+  border: 1px solid #d70022;
+}
+
+.info-section {
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.info-section ul {
+  margin: 10px 0;
+  padding-left: 20px;
+}
+
+.info-section li {
+  margin-bottom: 8px;
+  font-size: 13px;
+  color: #666;
+  line-height: 1.5;
+}
+
+kbd {
+  display: inline-block;
+  padding: 2px 6px;
+  font-family: monospace;
+  font-size: 12px;
+  color: #333;
+  background: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+}
