@@ -1,18 +1,23 @@
 {
-  "name": "all-site-media-downloader",
+  "name": "ultimate-all-site-image-video-downloader",
   "version": "1.0.0",
-  "description": "Browser extension for downloading images and videos from any website",
+  "description": "Browser extension for downloading images, videos, audio files, and documents from any website",
   "scripts": {
-    "lint": "web-ext lint",
+    "lint": "node scripts/lint.js",
     "build": "web-ext build",
-    "start": "web-ext run"
+    "run": "web-ext run",
+    "start": "web-ext run",
+    "generate-icons": "node scripts/create-placeholder-icons.js"
   },
   "keywords": [
     "browser-extension",
+    "chrome",
     "firefox",
+    "edge",
     "media-downloader",
     "image-downloader",
-    "video-downloader"
+    "video-downloader",
+    "audio-downloader"
   ],
   "author": "",
   "license": "MIT",

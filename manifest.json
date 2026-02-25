@@ -1,42 +1,46 @@
 {
-  "manifest_version": 2,
-  "name": "All-Site Media Downloader",
+  "manifest_version": 3,
+  "name": "Ultimate All-Site Image & Video Downloader",
   "version": "1.0.0",
-  "description": "Download images and videos from any website with progress tracking and previews",
+  "description": "Download images, videos, audio files, and documents from any webpage with ease",
   "icons": {
-    "48": "icons/icon-48.png",
-    "96": "icons/icon-96.png"
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
   },
   "permissions": [
     "downloads",
-    "notifications",
     "storage",
     "tabs",
-    "<all_urls>"
+    "contextMenus",
+    "scripting"
   ],
+  "host_permissions": ["<all_urls>"],
   "background": {
-    "scripts": ["background.js"]
+    "service_worker": "background.js"
   },
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["content.js"],
-      "css": ["content.css"],
-      "run_at": "document_idle"
-    }
-  ],
-  "browser_action": {
+  "action": {
     "default_popup": "popup.html",
     "default_icon": {
-      "16": "icons/icon-48.png",
-      "32": "icons/icon-48.png"
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png"
     },
-    "default_title": "Media Downloader Settings"
+    "default_title": "Ultimate Downloader"
+  },
+  "commands": {
+    "_execute_action": {
+      "suggested_key": {
+        "default": "Alt+D"
+      },
+      "description": "Open the downloader popup"
+    }
   },
   "browser_specific_settings": {
     "gecko": {
-      "id": "media-downloader@example.com",
-      "strict_min_version": "57.0"
+      "id": "ultimate-downloader@example.com",
+      "strict_min_version": "128.0"
     }
   }
 }
