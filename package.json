@@ -4,7 +4,7 @@
   "description": "Browser extension for downloading images, videos, audio files, and documents from any website",
   "scripts": {
     "lint": "node scripts/lint.js",
-    "build": "web-ext build",
+    "build": "web-ext build --overwrite-dest",
     "run": "web-ext run",
     "start": "web-ext run",
     "generate-icons": "node scripts/create-placeholder-icons.js"

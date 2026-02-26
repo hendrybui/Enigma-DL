@@ -2,6 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ultimate Downloader</title>
   <link rel="stylesheet" href="popup.css">
 </head>
@@ -11,8 +12,11 @@
       <div class="header-icon">📥</div>
       <div class="header-text">
         <h1>Ultimate Downloader</h1>
-        <p>Download images &amp; videos from any site</p>
+        <p>Download images & videos from any site</p>
       </div>
+      <button id="themeToggle" class="theme-toggle" title="Toggle Light/Dark Mode">
+        <span class="theme-icon">🌙</span>
+      </button>
     </div>
 
     <div class="actions-row">
@@ -21,42 +25,51 @@
     </div>
 
     <div class="filters-row">
-      <label class="filter-label">
-        <input type="checkbox" id="filterImages" checked>
-        <span>Images</span>
-      </label>
-      <label class="filter-label">
-        <input type="checkbox" id="filterVideos" checked>
-        <span>Videos</span>
-      </label>
-      <label class="filter-label">
-        <input type="checkbox" id="filterAudio" checked>
-        <span>Audio</span>
-      </label>
-      <label class="filter-label">
-        <input type="checkbox" id="filterDocuments" checked>
-        <span>Docs</span>
-      </label>
+      <div class="filter-group">
+        <label class="filter-label">
+          <input type="checkbox" id="filterImages" checked>
+          <span>Images</span>
+        </label>
+        <label class="filter-label">
+          <input type="checkbox" id="filterVideos" checked>
+          <span>Videos</span>
+        </label>
+        <label class="filter-label">
+          <input type="checkbox" id="filterAudio" checked>
+          <span>Audio</span>
+        </label>
+        <label class="filter-label">
+          <input type="checkbox" id="filterDocuments" checked>
+          <span>Docs</span>
+        </label>
+      </div>
       <div class="min-size">
-        <span>Min Size:</span>
+        <span>Min:</span>
         <input type="number" id="minSize" placeholder="0" min="0" value="0">
         <span>KB</span>
       </div>
     </div>
 
     <div class="stats-row">
-      <span id="statsImages" class="stat stat-image">0 images</span>
-      <span id="statsVideos" class="stat stat-video">0 videos</span>
-      <span id="statsAudio" class="stat stat-audio">0 audio</span>
-      <span id="statsDocs" class="stat stat-doc">0 docs</span>
+      <span id="statsImages" class="stat stat-image">📷 0</span>
+      <span id="statsVideos" class="stat stat-video">🎬 0</span>
+      <span id="statsAudio" class="stat stat-audio">🎵 0</span>
+      <span id="statsDocs" class="stat stat-doc">📄 0</span>
     </div>
 
     <div id="mediaList" class="media-list">
-      <div class="empty-state">No media found. Click "Scan Page" to discover media.</div>
+      <div class="empty-state">
+        <span>No media found</span>
+        <small>Click "Scan Page" to discover media</small>
+      </div>
     </div>
 
     <div class="footer-row">
-      <button id="clearBtn" class="btn btn-secondary">Clear List</button>
+      <div class="footer-buttons">
+        <button id="selectAllBtn" class="btn btn-secondary btn-small">✓ Select All</button>
+        <button id="deselectAllBtn" class="btn btn-secondary btn-small">✗ Deselect</button>
+        <button id="clearBtn" class="btn btn-secondary btn-small">🗑 Clear</button>
+      </div>
       <span id="statusMsg" class="status-msg"></span>
     </div>
   </div>

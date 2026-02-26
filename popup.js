@@ -4,6 +4,7 @@
 
 let mediaItems = [];
 let filteredItems = [];
+let selectedItems = new Set(); // Track selected items by URL
 
 // DOM references
 const scanBtn = document.getElementById('scanBtn');
@@ -19,6 +20,58 @@ const statsVideos = document.getElementById('statsVideos');
 const statsAudio = document.getElementById('statsAudio');
 const statsDocs = document.getElementById('statsDocs');
 const statusMsg = document.getElementById('statusMsg');
+const themeToggle = document.getElementById('themeToggle');
+const themeIcon = document.querySelector('.theme-icon');
+
+// ============ Theme Management ============
+
+/**
+ * Detect system color scheme preference
+ */
+function getSystemTheme() {
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
+
+/**
+ * Apply theme to document
+ */
+function applyTheme(theme) {
+  document.documentElement.classList.remove('light', 'dark');
+  document.documentElement.classList.add(theme);
+  
+  // Update icon
+  if (themeIcon) {
+    themeIcon.textContent = theme === 'dark' ? '☀️' : '🌙';
+  }
+}
+
+/**
+ * Load and apply saved theme or system preference
+ */
+async function loadTheme() {
+  const settings = await chrome.storage.sync.get({ theme: 'system' });
+  const theme = settings.theme === 'system' ? getSystemTheme() : settings.theme;
+  applyTheme(theme);
+}
+
+/**
+ * Toggle between light and dark theme
+ */
+async function toggleTheme() {
+  const currentTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+  const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  
+  applyTheme(newTheme);
+  await chrome.storage.sync.set({ theme: newTheme });
+}
+
+// Listen for system theme changes
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', async (e) => {
+  const settings = await chrome.storage.sync.get({ theme: 'system' });
+  if (settings.theme === 'system') {
+    applyTheme(e.matches ? 'dark' : 'light');
+  }
+});
 
 // Load saved filter settings
 async function loadSettings() {
@@ -101,10 +154,10 @@ function applyFilters() {
 
 // Update statistics display
 function updateStats() {
-  statsImages.textContent = mediaItems.filter(i => i.type === 'image').length + ' images';
-  statsVideos.textContent = mediaItems.filter(i => i.type === 'video').length + ' videos';
-  statsAudio.textContent = mediaItems.filter(i => i.type === 'audio').length + ' audio';
-  statsDocs.textContent = mediaItems.filter(i => i.type === 'document').length + ' docs';
+  statsImages.textContent = '📷 ' + mediaItems.filter(i => i.type === 'image').length;
+  statsVideos.textContent = '🎬 ' + mediaItems.filter(i => i.type === 'video').length;
+  statsAudio.textContent = '🎵 ' + mediaItems.filter(i => i.type === 'audio').length;
+  statsDocs.textContent = '📄 ' + mediaItems.filter(i => i.type === 'document').length;
 }
 
 // Render media list
@@ -112,7 +165,7 @@ function renderList() {
   mediaListEl.innerHTML = '';
 
   if (filteredItems.length === 0) {
-    mediaListEl.innerHTML = '<div class="empty-state">No media found. Click "Scan Page" to discover media.</div>';
+    mediaListEl.innerHTML = '<div class="empty-state"><span>No media found</span><small>Click "Scan Page" to discover media</small></div>';
     downloadAllBtn.disabled = true;
     return;
   }
@@ -129,6 +182,26 @@ function renderList() {
 function createMediaCard(item) {
   const card = document.createElement('div');
   card.className = 'media-card';
+  if (selectedItems.has(item.url)) {
+    card.classList.add('selected');
+  }
+
+  // Checkbox for selection
+  const checkbox = document.createElement('input');
+  checkbox.type = 'checkbox';
+  checkbox.className = 'media-checkbox';
+  checkbox.checked = selectedItems.has(item.url);
+  checkbox.addEventListener('change', (e) => {
+    if (e.target.checked) {
+      selectedItems.add(item.url);
+      card.classList.add('selected');
+    } else {
+      selectedItems.delete(item.url);
+      card.classList.remove('selected');
+    }
+    updateSelectionCount();
+  });
+  card.appendChild(checkbox);
 
   // Thumbnail
   const thumb = document.createElement('div');
@@ -172,10 +245,21 @@ function createMediaCard(item) {
     dim.textContent = `${item.width}×${item.height}`;
     meta.appendChild(dim);
   }
+  if (item.duration) {
+    const dur = document.createElement('span');
+    dur.textContent = formatDuration(item.duration);
+    meta.appendChild(dur);
+  }
   if (item.size) {
     const sz = document.createElement('span');
     sz.textContent = formatSize(item.size);
     meta.appendChild(sz);
+  }
+  if (item.format) {
+    const fmt = document.createElement('span');
+    fmt.textContent = item.format.split('/')[1] || item.format;
+    fmt.style.opacity = '0.7';
+    meta.appendChild(fmt);
   }
   info.appendChild(meta);
   card.appendChild(info);
@@ -210,10 +294,21 @@ function downloadItem(item) {
   });
 }
 
-// Download all filtered items
+// Download all filtered items (only selected ones if any are selected)
 function downloadAll() {
-  if (filteredItems.length === 0) return;
-  filteredItems.forEach(item => {
+  // Determine which items to download
+  let itemsToDownload;
+  if (selectedItems.size > 0) {
+    // Download only selected items
+    itemsToDownload = filteredItems.filter(item => selectedItems.has(item.url));
+  } else {
+    // No selection - download all filtered items
+    itemsToDownload = filteredItems;
+  }
+  
+  if (itemsToDownload.length === 0) return;
+  
+  itemsToDownload.forEach(item => {
     const filename = getFilenameFromUrl(item.url);
     chrome.downloads.download({
       url: item.url,
@@ -221,7 +316,29 @@ function downloadAll() {
       saveAs: false
     });
   });
-  setStatus(`Downloading ${filteredItems.length} file${filteredItems.length !== 1 ? 's' : ''}...`);
+  setStatus(`Downloading ${itemsToDownload.length} file${itemsToDownload.length !== 1 ? 's' : ''}...`);
+}
+
+// Update selection count display
+function updateSelectionCount() {
+  const count = selectedItems.size;
+  if (count > 0) {
+    setStatus(`${count} item${count !== 1 ? 's' : ''} selected for download`);
+  }
+}
+
+// Select all filtered items
+function selectAll() {
+  filteredItems.forEach(item => selectedItems.add(item.url));
+  renderList();
+  updateSelectionCount();
+}
+
+// Deselect all items
+function deselectAll() {
+  selectedItems.clear();
+  renderList();
+  updateSelectionCount();
 }
 
 // Helper: extract filename from URL
@@ -238,9 +355,24 @@ function getFilenameFromUrl(url) {
 
 // Helper: format bytes to human-readable size
 function formatSize(bytes) {
+  if (!bytes || bytes === 0) return '0 B';
+  if (bytes < 0) return '';  // -1 indicates fetch failure, show nothing
   if (bytes < 1024) return bytes + ' B';
   if (bytes < 1024 * 1024) return Math.round(bytes / 1024) + ' KB';
   return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+}
+
+// Helper: format duration in seconds to human-readable format
+function formatDuration(seconds) {
+  if (!seconds || seconds === 0) return '';
+  const mins = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
+  if (mins > 60) {
+    const hrs = Math.floor(mins / 60);
+    const remainMins = mins % 60;
+    return `${hrs}:${remainMins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  }
+  return `${mins}:${secs.toString().padStart(2, '0')}`;
 }
 
 // Show status message
@@ -256,16 +388,22 @@ filterVideos.addEventListener('change', applyFilters);
 filterAudio.addEventListener('change', applyFilters);
 filterDocuments.addEventListener('change', applyFilters);
 minSizeInput.addEventListener('input', applyFilters);
+themeToggle.addEventListener('click', toggleTheme);
 
 document.getElementById('clearBtn').addEventListener('click', () => {
   mediaItems = [];
   filteredItems = [];
+  selectedItems.clear();
   renderList();
   updateStats();
   setStatus('');
 });
 
+document.getElementById('selectAllBtn').addEventListener('click', selectAll);
+document.getElementById('deselectAllBtn').addEventListener('click', deselectAll);
+
 // Initialize
+loadTheme();
 loadSettings();
 renderList();
 updateStats();

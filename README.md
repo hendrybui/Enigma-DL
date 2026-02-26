@@ -19,10 +19,13 @@ All-Site Media Downloader lets you grab every image and video from any webpage w
 | 🔍 **Automatic Media Discovery** | Automatically finds all images and videos on any webpage |
 | 🔄 **Live Updates** | Uses MutationObserver to detect lazy-loaded media |
 | 📦 **Batch Downloads** | Select and download multiple media files at once |
+| ⬇️ **Download All** | One-click download of all detected media files |
 | 📊 **Progress Tracking** | Real-time download progress with visual feedback |
+| 📋 **Metadata Display** | Shows resolution, file size, format, and duration for media |
+| 🌓 **Light/Dark Theme** | Toggle between themes with system preference detection |
 | 🏷️ **Smart Naming** | Configurable filename patterns with timestamps and page titles |
 | ⚙️ **Customizable Settings** | Configure download folders and naming patterns |
-| ⌨️ **Keyboard Shortcut** | Press `Ctrl+Shift+M` to toggle the media panel |
+| ⌨️ **Keyboard Shortcut** | Press `Alt+Shift+D` to open the downloader popup |
 | 🔢 **Badge Counter** | Shows number of active downloads in the browser toolbar |
 | 🔔 **Notifications** | Optional toast notifications when downloads complete |
 
@@ -62,17 +65,35 @@ All-Site Media Downloader lets you grab every image and video from any webpage w
 
 | Method | Action |
 |--------|--------|
-| ⌨️ **Keyboard** | Press `Ctrl+Shift+M` on any webpage |
+| ⌨️ **Keyboard** | Press `Alt+Shift+D` on any webpage |
 | 🖱️ **Toolbar** | Click the extension icon in the browser toolbar |
-| 🤖 **Automatic** | Panel appears automatically when media is detected |
 
 ### Downloading Media
 
-1. The extension automatically scans the page for images and videos
-2. Select the media items you want to download using checkboxes
-3. Use **"Select All"** or **"Deselect All"** for bulk selection
-4. Click **"Download Selected"** to start downloads
+1. Click **"Scan Page"** to detect all media on the page
+2. Use the filter checkboxes to show/hide media types (Images, Videos, Audio, Docs)
+3. Set minimum file size filter if needed
+4. Click **"Download All"** to download all filtered items, or use individual download buttons
 5. Monitor progress in the panel and browser badge
+
+### Theme Toggle
+
+The extension supports both **Light** and **Dark** themes:
+
+- **Automatic Detection**: On first use, the extension detects your system's color scheme preference
+- **Manual Toggle**: Click the 🌙/☀️ icon in the header to switch themes
+- **Persistence**: Your theme preference is saved and will be applied on subsequent uses
+
+### Metadata Display
+
+Each media item displays detailed metadata:
+
+| Media Type | Metadata Shown |
+|------------|----------------|
+| **Images** | Resolution (W×H), File Size, Format (JPEG, PNG, etc.) |
+| **Videos** | Resolution, Duration, File Size, Format |
+| **Audio** | Duration, File Size, Format |
+| **Documents** | File Size, Format |
 
 ![Media Panel Screenshot](assets/media-panel.png)
 > 📸 *Screenshot placeholder - replace with actual screenshot*

@@ -30,6 +30,12 @@ chrome.runtime.onInstalled.addListener(() => {
     title: 'Download All Media',
     contexts: ['page']
   });
+  // Add "Don't Download" context menu for unselecting items
+  chrome.contextMenus.create({
+    id: 'dont-download',
+    title: 'Don\'t Download This',
+    contexts: ['image', 'video', 'audio', 'link']
+  });
 });
 
 // Handle context menu clicks
@@ -44,6 +50,19 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
     downloadFile(info.linkUrl, true);
   } else if (info.menuItemId === 'download-all-media' && tab) {
     await downloadAllFromPage(tab);
+  } else if (info.menuItemId === 'dont-download') {
+    // Get the URL to ignore (could be srcUrl, linkUrl, etc.)
+    const urlToIgnore = info.srcUrl || info.linkUrl || info.pageUrl;
+    if (urlToIgnore) {
+      // Store the ignored URL in chrome storage
+      chrome.storage.sync.get({ ignoredUrls: [] }, (result) => {
+        const ignoredUrls = result.ignoredUrls || [];
+        if (!ignoredUrls.includes(urlToIgnore)) {
+          ignoredUrls.push(urlToIgnore);
+          chrome.storage.sync.set({ ignoredUrls });
+        }
+      });
+    }
   }
 });
 
