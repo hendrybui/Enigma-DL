@@ -1,0 +1,62 @@
+name: Lint & Validate
+
+on:
+  push:
+    branches: [ main, develop, readme-updates, media-downloader-f ]
+  pull_request:
+    branches: [ main, develop, readme-updates, media-downloader-f ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+    
+    - name: Install dependencies
+      run: npm install
+    
+    - name: Run ESLint
+      run: npm run lint
+    
+    - name: Validate manifest.json
+      run: |
+        if ! python3 -m json.tool manifest.json > /dev/null; then
+          echo "Invalid manifest.json"
+          exit 1
+        fi
+      continue-on-error: true
+
+  build:
+    runs-on: ubuntu-latest
+    needs: lint
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 20.x
+    
+    - name: Install dependencies
+      run: npm install
+    
+    - name: Build extension
+      run: npm run build
+    
+    - name: Upload build artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: web-ext-build
+        path: web-ext-artifacts/
+        retention-days: 30

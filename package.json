@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "Browser extension for downloading images, videos, audio files, and documents from any website",
   "scripts": {
-    "lint": "node scripts/lint.js",
+    "lint": "eslint '**/*.js' --ignore-pattern 'node_modules/' --ignore-pattern 'web-ext-artifacts/'",
+    "lint:fix": "eslint '**/*.js' --fix --ignore-pattern 'node_modules/' --ignore-pattern 'web-ext-artifacts/'",
     "build": "web-ext build --overwrite-dest",
     "run": "web-ext run",
     "start": "web-ext run",
@@ -19,9 +20,16 @@
     "video-downloader",
     "audio-downloader"
   ],
-  "author": "",
+  "author": "Hendry Bui",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hendrybui/Enigma-DL.git"
+  },
+  "homepage": "https://github.com/hendrybui/Enigma-DL#readme",
   "devDependencies": {
-    "web-ext": "^8.3.0"
+    "web-ext": "^8.3.0",
+    "eslint": "^8.0.0",
+    "eslint-env": "webextensions"
   }
 }
